@@ -4,7 +4,7 @@
 ;; Created: 2010-8-12
 ;; Version: 1.0
 ;; Last-Updated: 2010-8-13
-;; URL: 
+;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words
 ;; Compatability:
 ;;
@@ -64,7 +64,7 @@
   "Minor mode for highlighting bad english writing."
   :prefix "writegood-"
   :group 'help
-  :link '(url-link "http://github_link_here"))
+  :link '(url-link "http://github.com/bnbeckwith/writegood-mode"))
 
 ;; Weaselwords
 (defface writegood-weasels-face
