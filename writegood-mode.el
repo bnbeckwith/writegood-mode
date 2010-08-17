@@ -69,7 +69,7 @@
 ;; Weaselwords
 (defface writegood-weasels-face
   '((((class color) (background light))
-     (:inherit font-lock-warning-face :background "orange"))
+     (:inherit font-lock-warning-face :background "moccasin"))
     (((class color) (background dark))
      (:inherit font-lock-warning-face :background "DarkOrange")))
   "Writegood face for weasel words"
@@ -96,7 +96,7 @@
 ;; Passive Voice
 (defface writegood-passive-voice-face
   '((((class color))
-     (:inherit font-lock-warning-face :background "yellow")))
+     (:inherit font-lock-warning-face :background "LemonChiffon")))
   "Writegood face for passive-voice"
   :group 'writegood)
 
@@ -141,7 +141,7 @@
 ;; Duplicates
 (defface writegood-duplicates-face
   '((((class color) (background light))
-     (:inherit font-lock-warning-face :background "HotPink"))
+     (:inherit font-lock-warning-face :background "MistyRose"))
     (((class color) (background dark))
      (:inherit font-lock-warning-face :background "DeepPink")))
   "Writegood face for duplicate words"
@@ -195,7 +195,7 @@
 
 (define-minor-mode writegood-mode
   "Colorize issues with the writing in the buffer."
-  :lighter " WryteGud"
+  :lighter " Wg"
   (progn
     (if writegood-mode
 	(writegood-turn-on)
