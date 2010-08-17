@@ -1,0 +1,45 @@
+
+
+* Writegood Mode
+
+This is a minor mode to aid in finding comming writing problems.  [[http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/][Matt
+Might's weaselwords scripts]] inspired this mode.
+
+It highlights text based on a set of weasel-words, passive-voice and
+duplicate words.
+
+* Basic Usage
+
+First, load in the mode.
+
+: (add-to-list 'load-path "path/to/writegood-mode")
+: (require 'writegood-mode)
+: (global-set-key "\C-cg" 'writegood-mode)
+
+I use the command key above to start the mode when I wish to check my
+writing.
+
+* Customization
+
+The user is free to customize three main portions of the mode.
+
+** Faces
+
+   The three faces used pull from the default warning face and add
+   subtle backgrounds.  There is a separate face for each check performed.
+
+   - Weasel words (writegood-weasels-face)
+   - Passive voice (writegood-passive-voice-face)
+   - Duplicate words (writegood-duplicates-face)
+
+** Weasel Words
+
+   There is a large list of included weasel words, but you may have
+   your own.  See the write-good-weasel-words variable to modify this
+   list.
+
+** Passive Voice Irregulars
+
+   There is also a list of irregular passive voice verbs.  These are
+   the verbs that do not end in 'ed' to signify past tense. This
+   variable allow the user to modify the list as needed.
