@@ -2,10 +2,10 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 1.0
+;; Version: 1.1
 ;; Last-Updated: 2010-8-13
 ;; URL: http://github.com/bnbeckwith/writegood-mode
-;; Keywords: writing weasel-words
+;; Keywords: writing weasel-words grammar
 ;; Compatability:
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 1.1 Fixed regexps to be multiline.
 ;; 1.0 Initial version
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -129,7 +130,7 @@
   :type 'list)
 
 (defvar writegood-passive-voice-font-lock-keywords-regexp
-  (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b[ ]*\\(\\w+ed\\|"
+  (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b[\s\n]+\\(\\w+ed\\|"
 	  (regexp-opt writegood-passive-voice-irregulars)
 	  "\\)")
   "Font-lock keywords regexp for passive-voice")
@@ -148,7 +149,7 @@
   :group 'writegood)
 
 (defvar writegood-duplicates-font-lock-keywords-regexp
-  "\\b\\(\\w+\\)[ ]+\\1"
+  "\\b\\(\\w+\\)[\s\n]+\\1"
   "Font-lock keywords for duplicates")
 
 (defconst writegood-duplicates-font-lock-keywords
@@ -183,6 +184,8 @@
 
 (defun writegood-turn-on ()
   "Turn on writegood-mode."
+  (make-local-variable 'font-lock-keywords-case-fold-search)
+  (setq font-lock-keywords-case-fold-search t)
   (writegood-weasels-turn-on)
   (writegood-passive-voice-turn-on)
   (writegood-duplicates-turn-on))
