@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 1.2 Fixed weasel-words regexp to have word boundaries
 ;; 1.1 Fixed regexps to be multiline.
 ;; 1.0 Initial version
 ;;
@@ -87,8 +88,8 @@
   :type 'list)
   
 (defvar writegood-weasels-font-lock-keywords-regexp
- (regexp-opt writegood-weasel-words)
- "Matches weasel-words")
+  (concat "\\b" (regexp-opt writegood-weasel-words) "\\b")
+  "Matches weasel-words")
 
 (defconst writegood-weasels-font-lock-keywords
   (list (list writegood-weasels-font-lock-keywords-regexp
