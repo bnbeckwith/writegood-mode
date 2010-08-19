@@ -94,7 +94,7 @@
   (concat "\\b" (regexp-opt writegood-weasel-words) "\\b")
   "Matches weasel-words")
 
-(defconst writegood-weasels-font-lock-keywords
+(defvar writegood-weasels-font-lock-keywords
   (list (list writegood-weasels-font-lock-keywords-regexp
 	      0 (quote 'writegood-weasels-face) 'prepend)))
 
@@ -139,7 +139,7 @@
 	  "\\)")
   "Font-lock keywords regexp for passive-voice")
 
-(defconst writegood-passive-voice-font-lock-keywords
+(defvar writegood-passive-voice-font-lock-keywords
   (list (list writegood-passive-voice-font-lock-keywords-regexp
 	      0 (quote 'writegood-passive-voice-face) 'prepend)))
 
