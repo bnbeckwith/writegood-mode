@@ -68,6 +68,9 @@
   :group 'help
   :link '(url-link "http://github.com/bnbeckwith/writegood-mode"))
 
+(defconst writegood-version "1.2"
+  "WriteGood mode version")
+
 ;; Weaselwords
 (defface writegood-weasels-face
   '((((class color) (background light))
@@ -153,11 +156,16 @@
   "\\b\\(\\w+\\)[\s\n]+\\1"
   "Font-lock keywords for duplicates")
 
-(defconst writegood-duplicates-font-lock-keywords
+(defvar writegood-duplicates-font-lock-keywords
   (list (list writegood-duplicates-font-lock-keywords-regexp
 	      0 (quote 'writegood-duplicates-face) 'prepend)))
 
 ;;;;;;;;;;;;;;;;;;;; Functions:
+
+(defun writegood-version ()
+  "Tell the version you are using"
+  (interactive)
+  (message writegood-version))
 
 (defun writegood-weasels-turn-on ()
   "Turn on syntax highlighting for weasels"
