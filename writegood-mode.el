@@ -2,7 +2,7 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 1.1
+;; Version: 1.2
 ;; Last-Updated: 2010-8-13
 ;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words grammar
@@ -49,8 +49,11 @@
 ;;; Test Text:
 ;;
 ;; This mode will improve various aspects of your writing in many ways.
-;; The text is searched and aspects are highlighted. 
-;; Another benefit is the the finding of duplicates
+;; With this mode text within comments will be searched for the
+;; the duplicate propblem.
+;; The text is searched and aspects (even withing comments) are 
+;; highlighted. 
+;; Another benefit is the the finding of duplicates.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -134,7 +137,7 @@
   :type 'list)
 
 (defvar writegood-passive-voice-font-lock-keywords-regexp
-  (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b[\s\n]+\\(\\w+ed\\|"
+  (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
 	  (regexp-opt writegood-passive-voice-irregulars)
 	  "\\)")
   "Font-lock keywords regexp for passive-voice")
@@ -153,7 +156,7 @@
   :group 'writegood)
 
 (defvar writegood-duplicates-font-lock-keywords-regexp
-  "\\b\\(\\w+\\)[\s\n]+\\1"
+  "\\b\\([[:word:]]+\\)\\([[:space:]]\\|\\s<\\|\\s>\\)+\\1\\b"
   "Font-lock keywords for duplicates")
 
 (defvar writegood-duplicates-font-lock-keywords
