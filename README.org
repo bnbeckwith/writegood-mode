@@ -44,6 +44,6 @@ The user is free to customize three main portions of the mode.
 
 * Alternatives
 
-  [[Artbollocks][https://gitorious.org/robmyers/scripts/blobs/master/artbollocks-mode.el]]
+  [[https://gitorious.org/robmyers/scripts/blobs/master/artbollocks-mode.el][Artbollocks]]
   looks to be an alternative mode to this one. One advantage is a
-  built-in [[Flesch-Kincaid readability test][https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_test]].
+  built-in [[https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_test][Flesch-Kincaid readability test]].
