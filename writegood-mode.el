@@ -88,7 +88,8 @@
     "exceedingly" "quite" "remarkably" "few" "surprisingly" 
     "mostly" "largely" "huge" "tiny" "are a number" "is a number" 
     "excellent" "interestingly" "significantly" "substantially" 
-    "clearly" "vast" "relatively" "completely")
+    "clearly" "vast" "relatively" "completely" "literally" 
+    "not rocket science" "outside the box")
   "The weasel words to use"
   :group 'writegood
   :type 'list)
