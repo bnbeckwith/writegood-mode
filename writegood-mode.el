@@ -1,4 +1,4 @@
-;; writegood-mode.el --- Count number of words in a buffer
+;;; writegood-mode.el --- Polish up poor writing on the fly
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
@@ -219,3 +219,5 @@
     (font-lock-mode 1)))
 
 (provide 'writegood-mode)
+
+;;; writegood-mode.el ends here
