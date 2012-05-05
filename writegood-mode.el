@@ -140,7 +140,7 @@
 (defvar writegood-passive-voice-font-lock-keywords-regexp
   (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
 	  (regexp-opt writegood-passive-voice-irregulars)
-	  "\\)")
+	  "\\)\\b")
   "Font-lock keywords regexp for passive-voice")
 
 (defvar writegood-passive-voice-font-lock-keywords
