@@ -209,6 +209,7 @@
   (writegood-passive-voice-turn-off)
   (writegood-duplicates-turn-off))
 
+;;;###autoload
 (define-minor-mode writegood-mode
   "Colorize issues with the writing in the buffer."
   :lighter " Wg"
