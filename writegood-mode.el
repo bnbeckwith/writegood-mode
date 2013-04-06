@@ -49,9 +49,9 @@
 ;;; Test Text:
 ;;
 ;; This mode will improve various aspects of your writing in many ways.
-;; With this mode text within comments will be searched for the
-;; the duplicate propblem.
-;; The text is searched and aspects (even withing comments) are 
+;; With this mode, text within comments will be searched for the
+;; the duplicate problem.
+;; The text is searched and aspects (even within comments) are 
 ;; highlighted. 
 ;; Another benefit is the the finding of duplicates.
 ;;
