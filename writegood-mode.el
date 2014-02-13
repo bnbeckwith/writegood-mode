@@ -2,8 +2,8 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 1.2
-;; Last-Updated: 2010-8-13
+;; Version: 1.3
+;; Last-Updated: 2014-2-13
 ;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words grammar
 ;; Compatability:
@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 1.3 Several pull requests added, comments checked, passive voice regexp fixed
 ;; 1.2 Fixed weasel-words regexp to have word boundaries
 ;; 1.1 Fixed regexps to be multiline.
 ;; 1.0 Initial version
