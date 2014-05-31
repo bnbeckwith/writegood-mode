@@ -210,6 +210,41 @@
   (writegood-passive-voice-turn-off)
   (writegood-duplicates-turn-off))
 
+(defun writegood-count-syllables (str)
+  "Approximate the number of sentences in a string by counting vowels (including 'y')."
+  (max 1 (length (mapconcat (lambda (x) (if (member x (list 97 101 105 111 117 121)) "." "")) str ""))))
+
+(defun writegood-count-sentences (str)
+  "Approximate the number of sentences in a string by counting '.', '!', and '?'."
+  (max 1 (length (mapconcat (lambda (x) (if (member x (list 33 46 63)) "." "")) str ""))))
+
+(defun writegood-count-words (str)
+  (max 1 (/ (length str) 5)))
+
+(defun writegood-reading-ease (&optional start end)
+  "Flesch-Kincaid reading ease test. Scores roughly between 0 and 100."
+   (interactive)
+   (let* ((start     (if mark-active (region-beginning) (point-min)))
+          (end       (if mark-active (region-end) (point-max)))
+          (text      (buffer-substring-no-properties start end))
+          (words     (float (writegood-count-words text)))
+          (sentences (float (writegood-count-sentences text)))
+          (syllables (float (writegood-count-syllables text)))
+          (score     (- 206.835 (* 1.015 (/ words sentences)) (* 84.6 (/ syllables words)))))
+     (message "Flesch-Kincaid reading ease score: %.2f" score)))
+
+(defun writegood-grade-level (&optional start end)
+  "Flesch-Kincaid grade level test. Converts reading ease score to a grade level (Score ~ years of school needed to read passage)."
+   (interactive)
+   (let* ((start     (if mark-active (region-beginning) (point-min)))
+          (end       (if mark-active (region-end) (point-max)))
+          (text      (buffer-substring-no-properties start end))
+          (words     (float (writegood-count-words text)))
+          (sentences (float (writegood-count-sentences text)))
+          (syllables (float (writegood-count-syllables text)))
+          (score     (+ (* 0.39 (/ words sentences)) (* 11.8 (/ syllables words)) -15.59)))
+     (message "Flesh-Kincaid grade level score: %.2f" score)))
+
 ;;;###autoload
 (define-minor-mode writegood-mode
   "Colorize issues with the writing in the buffer."
@@ -220,6 +255,8 @@
       (writegood-turn-off))
     (font-lock-mode 1)))
 
-(provide 'writegood-mode)
+(provide 'writegood-mode
+         'writegood-reading-ease
+         'writegood-grade-level)
 
 ;;; writegood-mode.el ends here
