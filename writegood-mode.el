@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2.0 Fleisch-Kincaid scoring added to functionality
 ;; 1.3 Several pull requests added, comments checked, passive voice regexp fixed
 ;; 1.2 Fixed weasel-words regexp to have word boundaries
 ;; 1.1 Fixed regexps to be multiline.
@@ -138,6 +139,18 @@
   :group 'writegood
   :type 'list)
 
+(defcustom writegood-sentence-punctuation
+  '(?. ?? ?!)
+  "List of punctuation denoting sentence end"
+  :group 'writegood
+  :type '(repeat character))
+
+(defcustom writegood-vowels
+  '(?a ?e ?i ?o ?u ?y)
+  "List of punctuation denoting sentence end"
+  :group 'writegood
+  :type '(repeat character))
+
 (defvar writegood-passive-voice-font-lock-keywords-regexp
   (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
 	  (regexp-opt writegood-passive-voice-irregulars)
@@ -210,40 +223,54 @@
   (writegood-passive-voice-turn-off)
   (writegood-duplicates-turn-off))
 
-(defun writegood-count-syllables (str)
-  "Approximate the number of sentences in a string by counting vowels (including 'y')."
-  (max 1 (length (mapconcat (lambda (x) (if (member x (list 97 101 105 111 117 121)) "." "")) str ""))))
+(defun writegood-count-words (rstart rend)
+  "Count the words specified by the region bounded by RSTART and REND."
+  (if (boundp 'count-words)
+      (count-words rstart rend)
+    (how-many "[[:word:]]+" rstart rend)))
 
-(defun writegood-count-sentences (str)
-  "Approximate the number of sentences in a string by counting '.', '!', and '?'."
-  (max 1 (length (mapconcat (lambda (x) (if (member x (list 33 46 63)) "." "")) str ""))))
+(defun writegood-count-sentences (rstart rend)
+  "Count the sentences specified by the region bounded by RSTART and REND."
+  (how-many (regexp-opt-charset writegood-sentence-punctuation) rstart rend))
 
-(defun writegood-count-words (str)
-  (max 1 (/ (length str) 5)))
+(defun writegood-count-syllables (rstart rend)
+  "Count the number of syllables in the region bounded by RSTART and REND."
+  (how-many (regexp-opt-charset writegood-vowels) rstart rend))
 
+(defun writegood-fk-parameters (&optional rstart rend)
+  "Flesch-Kincaid reading parameters"
+  (let* ((start (cond (rstart rstart)
+                      ((and transient-mark-mode mark-active) (region-beginning))
+                      ('t (point-min))))
+         (end   (cond (rend rend)
+                      ((and transient-mark-mode mark-active) (region-end))
+                      ('t (point-max))))
+         (words     (float (writegood-count-words start end)))
+         (syllables (float (writegood-count-syllables start end)))
+         (sentences (float (writegood-count-sentences start end))))
+    (list sentences words syllables)))
+
+;;;###autoload
 (defun writegood-reading-ease (&optional start end)
   "Flesch-Kincaid reading ease test. Scores roughly between 0 and 100."
    (interactive)
-   (let* ((start     (if mark-active (region-beginning) (point-min)))
-          (end       (if mark-active (region-end) (point-max)))
-          (text      (buffer-substring-no-properties start end))
-          (words     (float (writegood-count-words text)))
-          (sentences (float (writegood-count-sentences text)))
-          (syllables (float (writegood-count-syllables text)))
-          (score     (- 206.835 (* 1.015 (/ words sentences)) (* 84.6 (/ syllables words)))))
+   (let* ((params (writegood-fk-parameters start end))
+          (sentences (nth 0 params))
+          (words     (nth 1 params))
+          (syllables (nth 2 params))
+          (score  (- 206.835 (* 1.015 (/ words sentences)) (* 84.6 (/ syllables words)))))
      (message "Flesch-Kincaid reading ease score: %.2f" score)))
 
+;;;###autoload
 (defun writegood-grade-level (&optional start end)
   "Flesch-Kincaid grade level test. Converts reading ease score to a grade level (Score ~ years of school needed to read passage)."
    (interactive)
-   (let* ((start     (if mark-active (region-beginning) (point-min)))
-          (end       (if mark-active (region-end) (point-max)))
-          (text      (buffer-substring-no-properties start end))
-          (words     (float (writegood-count-words text)))
-          (sentences (float (writegood-count-sentences text)))
-          (syllables (float (writegood-count-syllables text)))
+   (let* ((params (writegood-fk-parameters start end))
+          (sentences (nth 0 params))
+          (words     (nth 1 params))
+          (syllables (nth 2 params))
           (score     (+ (* 0.39 (/ words sentences)) (* 11.8 (/ syllables words)) -15.59)))
-     (message "Flesh-Kincaid grade level score: %.2f" score)))
+     (message "Flesch-Kincaid grade level score: %.2f" score)))
 
 ;;;###autoload
 (define-minor-mode writegood-mode
@@ -255,8 +282,6 @@
       (writegood-turn-off))
     (font-lock-mode 1)))
 
-(provide 'writegood-mode
-         'writegood-reading-ease
-         'writegood-grade-level)
+(provide 'writegood-mode)
 
 ;;; writegood-mode.el ends here
