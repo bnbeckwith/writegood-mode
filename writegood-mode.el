@@ -234,8 +234,13 @@
   (how-many (regexp-opt-charset writegood-sentence-punctuation) rstart rend))
 
 (defun writegood-count-syllables (rstart rend)
-  "Count the number of syllables in the region bounded by RSTART and REND."
-  (how-many (regexp-opt-charset writegood-vowels) rstart rend))
+  "Count the (approximate) number of syllables in the region bounded by RSTART and REND.
+
+   Consecutive vowels count as one syllable. The endings -es -ed
+   and -e are not counted as syllables.
+  "
+  (- (how-many "[aeiouy]+" rstart rend)
+     (how-many "\\(es\\|ed\\|e\\)\\b" rstart rend)))
 
 (defun writegood-fk-parameters (&optional rstart rend)
   "Flesch-Kincaid reading parameters"
