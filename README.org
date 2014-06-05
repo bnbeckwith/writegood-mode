@@ -1,21 +1,36 @@
 * Writegood Mode
 
-This is a minor mode to aid in finding common writing problems.  [[http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/][Matt
-Might's weaselwords scripts]] inspired this mode.
+  This is a minor mode to aid in finding common writing problems.  [[http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/][Matt
+  Might's weaselwords scripts]] inspired this mode.
 
-It highlights text based on a set of weasel-words, passive-voice and
-duplicate words.
+  It highlights text based on a set of weasel-words, passive-voice and
+  duplicate words.
 
 * Basic Usage
 
-First, load in the mode.
+  First, load in the mode.
 
 : (add-to-list 'load-path "path/to/writegood-mode")
 : (require 'writegood-mode)
 : (global-set-key "\C-cg" 'writegood-mode)
 
-I use the command key above to start the mode when I wish to check my
-writing.
+  I use the command key above to start the mode when I wish to check my
+  writing.
+
+  Alternatively, this package is also available on MELPA. If installed
+  through the package manager, then only the global key customization
+  would be necessary.
+
+* Readability tests
+  
+  There are now two functions to perform [[http://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests][Flesch-Kincaid scoring]] and
+  grade-level estimation. These follow the known algorithms, but may
+  differ from other implementations due to the syllable estimation.
+
+  I use these global keys to get to the readability tests:
+
+: (global-set-key "\C-c\C-gg" 'writegood-grade-level)
+: (global-set-key "\C-c\C-ge" 'writegood-reading-ease)
 
 * Customization
 
@@ -44,6 +59,4 @@ The user is free to customize three main portions of the mode.
 
 * Alternatives
 
-  [[https://gitorious.org/robmyers/scripts/blobs/master/artbollocks-mode.el][Artbollocks]]
-  looks to be an alternative mode to this one. One advantage is a
-  built-in [[https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_test][Flesch-Kincaid readability test]].
+  [[https://gitorious.org/robmyers/scripts/blobs/master/artbollocks-mode.el][Artbollocks]] looks to be an alternative mode to this one.
