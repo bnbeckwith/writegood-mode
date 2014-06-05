@@ -23,7 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
-;; 2.0 Fleisch-Kincaid scoring added to functionality
+;; 2.0 Flesch-Kincaid scoring added to functionality
 ;; 1.3 Several pull requests added, comments checked, passive voice regexp fixed
 ;; 1.2 Fixed weasel-words regexp to have word boundaries
 ;; 1.1 Fixed regexps to be multiline.
@@ -73,7 +73,7 @@
   :group 'help
   :link '(url-link "http://github.com/bnbeckwith/writegood-mode"))
 
-(defconst writegood-version "1.2"
+(defconst writegood-version "2.0"
   "WriteGood mode version")
 
 ;; Weaselwords
