@@ -19,6 +19,19 @@
 ;;  writing.
 ;;  http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/
 ;;
+;;  You can change the list writegood-weasel-words using the custom
+;;  interface. If you only need add to the default list of weasel
+;;  words, put them to the list writegood-more-weasel-words. They are
+;;  highlighted next time you turn writewood mode on. Use the custom
+;;  interface or add a lisp statement into your configuration file.
+;;  E.g.:
+;;
+;;    (setq writegood-more-weasel-words
+;;          '("for the purpose of" "for the purposes of"))
+;;
+;;  Remember to modify weasel words only when the writegood-mode is off
+;;  or the highlight gets stuck on changed words.
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
@@ -95,14 +108,12 @@
   "The weasel words to use"
   :group 'writegood
   :type 'list)
-  
-(defvar writegood-weasels-font-lock-keywords-regexp
-  (concat "\\b" (regexp-opt writegood-weasel-words) "\\b")
-  "Matches weasel-words")
 
-(defvar writegood-weasels-font-lock-keywords
-  (list (list writegood-weasels-font-lock-keywords-regexp
-	      0 (quote 'writegood-weasels-face) 'prepend)))
+(defcustom writegood-more-weasel-words
+  nil
+  "Additional weasel words to use"
+  :group 'writegood
+  :type 'list)
 
 ;; Passive Voice
 (defface writegood-passive-voice-face
@@ -179,9 +190,16 @@
   (interactive)
   (message writegood-version))
 
+(defun writegood-weasels-font-lock-keywords ()
+  "Turn weasel word list into list of regexps"
+  (list (list (concat "\\b"
+                      (regexp-opt (append writegood-weasel-words
+                                          writegood-more-weasel-words)) "\\b")
+              0 (quote 'writegood-weasels-face) 'prepend)))
+
 (defun writegood-weasels-turn-on ()
   "Turn on syntax highlighting for weasels"
-  (font-lock-add-keywords nil writegood-weasels-font-lock-keywords))
+  (font-lock-add-keywords nil (writegood-weasels-font-lock-keywords)))
 
 (defun writegood-passive-voice-turn-on ()
   "Turn on warnings for passive voice"
@@ -193,7 +211,7 @@
 
 (defun writegood-weasels-turn-off ()
   "Turn on syntax highlighting for weasels"
-  (font-lock-remove-keywords nil writegood-weasels-font-lock-keywords))
+  (font-lock-remove-keywords nil (writegood-weasels-font-lock-keywords)))
 
 (defun writegood-passive-voice-turn-off ()
   "Turn on warnings for passive voice"
