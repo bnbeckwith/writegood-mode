@@ -2,7 +2,7 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 1.3
+;; Version: 2.1
 ;; Last-Updated: 2014-2-13
 ;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words grammar
@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2.1 Make user additions to word lists dynamic
 ;; 2.0 Flesch-Kincaid scoring added to functionality
 ;; 1.3 Several pull requests added, comments checked, passive voice regexp fixed
 ;; 1.2 Fixed weasel-words regexp to have word boundaries
@@ -96,12 +97,12 @@
   :group 'writegood
   :type '(repeat string))
   
-(defvar writegood-weasels-font-lock-keywords-regexp
-  (concat "\\b" (regexp-opt writegood-weasel-words) "\\b")
-  "Matches weasel-words")
+(defun writegood-weasels-font-lock-keywords-regexp ()
+  "Generate regex that matches weasel-words"
+  (concat "\\b" (regexp-opt writegood-weasel-words) "\\b"))
 
-(defvar writegood-weasels-font-lock-keywords
-  (list (list writegood-weasels-font-lock-keywords-regexp
+(defun writegood-weasels-font-lock-keywords ()
+  (list (list (writegood-weasels-font-lock-keywords-regexp)
 	      0 (quote 'writegood-weasels-face) 'prepend)))
 
 ;; Passive Voice
@@ -145,14 +146,14 @@
   :group 'writegood
   :type '(repeat character))
 
-(defvar writegood-passive-voice-font-lock-keywords-regexp
+(defun writegood-passive-voice-font-lock-keywords-regexp ()
+  "Generate font-lock keywords regexp for passive-voice"
   (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
 	  (regexp-opt writegood-passive-voice-irregulars)
-	  "\\)\\b")
-  "Font-lock keywords regexp for passive-voice")
+	  "\\)\\b"))
 
-(defvar writegood-passive-voice-font-lock-keywords
-  (list (list writegood-passive-voice-font-lock-keywords-regexp
+(defun writegood-passive-voice-font-lock-keywords ()
+  (list (list (writegood-passive-voice-font-lock-keywords-regexp)
 	      0 (quote 'writegood-passive-voice-face) 'prepend)))
 
 ;; Duplicates
@@ -168,7 +169,7 @@
   "\\b\\([[:word:]]+\\)\\([[:space:]]\\|\\s<\\|\\s>\\)+\\1\\b"
   "Font-lock keywords for duplicates")
 
-(defvar writegood-duplicates-font-lock-keywords
+(defun writegood-duplicates-font-lock-keywords ()
   (list (list writegood-duplicates-font-lock-keywords-regexp
 	      0 (quote 'writegood-duplicates-face) 'prepend)))
 
@@ -181,27 +182,27 @@
 
 (defun writegood-weasels-turn-on ()
   "Turn on syntax highlighting for weasels"
-  (font-lock-add-keywords nil writegood-weasels-font-lock-keywords))
+  (font-lock-add-keywords nil (writegood-weasels-font-lock-keywords)))
 
 (defun writegood-passive-voice-turn-on ()
   "Turn on warnings for passive voice"
-  (font-lock-add-keywords nil writegood-passive-voice-font-lock-keywords))
+  (font-lock-add-keywords nil (writegood-passive-voice-font-lock-keywords)))
 
 (defun writegood-duplicates-turn-on ()
   "Turn on warnings for duplicate words"
-  (font-lock-add-keywords nil writegood-duplicates-font-lock-keywords))
+  (font-lock-add-keywords nil (writegood-duplicates-font-lock-keywords)))
 
 (defun writegood-weasels-turn-off ()
   "Turn on syntax highlighting for weasels"
-  (font-lock-remove-keywords nil writegood-weasels-font-lock-keywords))
+  (font-lock-remove-keywords nil (writegood-weasels-font-lock-keywords)))
 
 (defun writegood-passive-voice-turn-off ()
   "Turn on warnings for passive voice"
-  (font-lock-remove-keywords nil writegood-passive-voice-font-lock-keywords))
+  (font-lock-remove-keywords nil (writegood-passive-voice-font-lock-keywords)))
 
 (defun writegood-duplicates-turn-off ()
   "Turn on warnings for duplicate words"
-  (font-lock-remove-keywords nil writegood-duplicates-font-lock-keywords))
+  (font-lock-remove-keywords nil (writegood-duplicates-font-lock-keywords)))
 
 (defun writegood-turn-on ()
   "Turn on writegood-mode."
