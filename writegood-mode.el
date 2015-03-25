@@ -23,12 +23,13 @@
 ;;
 ;;; Change Log:
 ;;
-;; 2.1 Make user additions to word lists dynamic
-;; 2.0 Flesch-Kincaid scoring added to functionality
-;; 1.3 Several pull requests added, comments checked, passive voice regexp fixed
-;; 1.2 Fixed weasel-words regexp to have word boundaries
-;; 1.1 Fixed regexps to be multiline.
-;; 1.0 Initial version
+;; 2.0.2 Fix Formatting in Org-mode files, make faces underline
+;; 2.0.1 Make user additions to word lists dynamic
+;; 2.0.0 Flesch-Kincaid scoring added to functionality
+;; 1.3.0 Several pull requests added, comments checked, passive voice regexp fixed
+;; 1.2.0 Fixed weasel-words regexp to have word boundaries
+;; 1.1.0 Fixed regexps to be multiline.
+;; 1.0.0 Initial version
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -79,7 +80,9 @@
 
 ;; Weaselwords
 (defface writegood-weasels-face
-  '((((class color) (background light))
+  '((((supports :underline (:style wave)))
+     :underline (:style wave :color "DarkOrange"))
+    (((class color) (background light))
      (:inherit font-lock-warning-face :background "moccasin"))
     (((class color) (background dark))
      (:inherit font-lock-warning-face :background "DarkOrange")))
@@ -107,7 +110,9 @@
 
 ;; Passive Voice
 (defface writegood-passive-voice-face
-  '((((class color))
+  '((((supports :underline (:style wave)))
+     :underline (:style wave :color "cyan"))
+    (((class color))
      (:inherit font-lock-warning-face :background "LemonChiffon")))
   "Writegood face for passive-voice"
   :group 'writegood)
@@ -158,8 +163,10 @@
 
 ;; Duplicates
 (defface writegood-duplicates-face
-  '((((class color) (background light))
-     (:inherit font-lock-warning-face :background "MistyRose"))
+  '((((supports :underline (:style wave)))
+     :underline (:style wave :color "DeepPink"))
+    (((class color) (background light))
+        (:inherit font-lock-warning-face :background "MistyRose"))
     (((class color) (background dark))
      (:inherit font-lock-warning-face :background "DeepPink")))
   "Writegood face for duplicate words"
@@ -182,15 +189,15 @@
 
 (defun writegood-weasels-turn-on ()
   "Turn on syntax highlighting for weasels"
-  (font-lock-add-keywords nil (writegood-weasels-font-lock-keywords)))
+  (font-lock-add-keywords nil (writegood-weasels-font-lock-keywords) t))
 
 (defun writegood-passive-voice-turn-on ()
   "Turn on warnings for passive voice"
-  (font-lock-add-keywords nil (writegood-passive-voice-font-lock-keywords)))
+  (font-lock-add-keywords nil (writegood-passive-voice-font-lock-keywords) t))
 
 (defun writegood-duplicates-turn-on ()
   "Turn on warnings for duplicate words"
-  (font-lock-add-keywords nil (writegood-duplicates-font-lock-keywords)))
+  (font-lock-add-keywords nil (writegood-duplicates-font-lock-keywords) t))
 
 (defun writegood-weasels-turn-off ()
   "Turn on syntax highlighting for weasels"
