@@ -94,7 +94,7 @@
     "not rocket science" "outside the box")
   "The weasel words to use"
   :group 'writegood
-  :type 'list)
+  :type '(repeat string))
   
 (defvar writegood-weasels-font-lock-keywords-regexp
   (concat "\\b" (regexp-opt writegood-weasel-words) "\\b")
@@ -137,7 +137,7 @@
     "withstood" "wrung" "written")
   "List of passive voice irregular verbs"
   :group 'writegood
-  :type 'list)
+  :type '(repeat string))
 
 (defcustom writegood-sentence-punctuation
   '(?. ?? ?!)
