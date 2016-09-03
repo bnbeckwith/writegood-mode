@@ -59,4 +59,4 @@ The user is free to customize three main portions of the mode.
 
 * Alternatives
 
-  [[https://gitorious.org/robmyers/scripts/blobs/master/artbollocks-mode.el][Artbollocks]] looks to be an alternative mode to this one.
+  [[https://github.com/sachac/artbollocks-mode][Artbollocks]] looks to be an alternative mode to this one.
