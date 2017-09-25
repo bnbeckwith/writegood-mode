@@ -2,8 +2,8 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 2.1
-;; Last-Updated: 2014-2-13
+;; Version: 2.0
+;; Last-Updated: 2015-03-25
 ;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words grammar
 ;; Compatability:
