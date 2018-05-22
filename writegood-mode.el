@@ -262,7 +262,7 @@
 
 From Wikipedia URL `https://en.wikipedia.org/wiki/Flesch–Kincaid_readability_tests'."
    (cond
-    ((< score 0) "Ouch! (Proust litterature)")
+    ((< score 0) "Ouch! (Proust literature)")
     ((and (<= 0 score) (< score 30.0)) "Very difficult (college graduate)")
     ((and (<= 30.0 score) (< score 50.0)) "Difficult (almost college)")
     ((and (<= 50.0 score) (< score 60.0)) "Fairly difficult (10-12th grade)")
