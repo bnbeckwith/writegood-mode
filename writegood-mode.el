@@ -257,6 +257,20 @@
          (sentences (float (writegood-count-sentences start end))))
     (list sentences words syllables)))
 
+(defun writegood-reading-ease-score->comment (score)
+   "Rough meaning of the Flesch-Kincaid reading ease test.
+
+From Wikipedia URL `https://en.wikipedia.org/wiki/Flesch–Kincaid_readability_tests'."
+   (cond
+    ((< score 0) "Ouch! (Proust literature)")
+    ((and (<= 0 score) (< score 30.0)) "Very difficult (college graduate)")
+    ((and (<= 30.0 score) (< score 50.0)) "Difficult (almost college)")
+    ((and (<= 50.0 score) (< score 60.0)) "Fairly difficult (10-12th grade)")
+    ((and (<= 60.0 score) (< score 70.0)) "Plain English (8-9th grade)")
+    ((and (<= 70.0 score) (< score 80.0)) "Fairly easy (7th grade)")
+    ((and (<= 80.0 score) (< score 90.0)) "Easy (6th grade)")
+    ((<= 90.0 score) "Very easy (5th grade)")))
+
 ;;;###autoload
 (defun writegood-reading-ease (&optional start end)
   "Flesch-Kincaid reading ease test. Scores roughly between 0 and 100."
@@ -266,7 +280,8 @@
           (words     (nth 1 params))
           (syllables (nth 2 params))
           (score  (- 206.835 (* 1.015 (/ words sentences)) (* 84.6 (/ syllables words)))))
-     (message "Flesch-Kincaid reading ease score: %.2f" score)))
+     (message "Flesch-Kincaid reading ease score: %.2f. %s" score
+            (writegood-reading-ease-score->comment score))))
 
 ;;;###autoload
 (defun writegood-grade-level (&optional start end)
