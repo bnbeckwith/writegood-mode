@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2.0.3 Add in a small decription of the Flesch-Kincaid score
 ;; 2.0.2 Fix Formatting in Org-mode files, make faces underline
 ;; 2.0.1 Make user additions to word lists dynamic
 ;; 2.0.0 Flesch-Kincaid scoring added to functionality
@@ -106,7 +107,7 @@
 
 (defun writegood-weasels-font-lock-keywords ()
   (list (list (writegood-weasels-font-lock-keywords-regexp)
-	      0 (quote 'writegood-weasels-face) 'prepend)))
+        0 (quote 'writegood-weasels-face) 'prepend)))
 
 ;; Passive Voice
 (defface writegood-passive-voice-face
@@ -154,12 +155,12 @@
 (defun writegood-passive-voice-font-lock-keywords-regexp ()
   "Generate font-lock keywords regexp for passive-voice"
   (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
-	  (regexp-opt writegood-passive-voice-irregulars)
-	  "\\)\\b"))
+    (regexp-opt writegood-passive-voice-irregulars)
+    "\\)\\b"))
 
 (defun writegood-passive-voice-font-lock-keywords ()
   (list (list (writegood-passive-voice-font-lock-keywords-regexp)
-	      0 (quote 'writegood-passive-voice-face) 'prepend)))
+        0 (quote 'writegood-passive-voice-face) 'prepend)))
 
 ;; Duplicates
 (defface writegood-duplicates-face
@@ -178,7 +179,7 @@
 
 (defun writegood-duplicates-font-lock-keywords ()
   (list (list writegood-duplicates-font-lock-keywords-regexp
-	      0 (quote 'writegood-duplicates-face) 'prepend)))
+        0 (quote 'writegood-duplicates-face) 'prepend)))
 
 ;;;;;;;;;;;;;;;;;;;; Functions:
 
@@ -258,7 +259,7 @@
     (list sentences words syllables)))
 
 (defun writegood-reading-ease-score->comment (score)
-   "Rough meaning of the Flesch-Kincaid reading ease test.
+  "Rough interpreation of the Flesch-Kincaid Reading ease SCORE.
 
 From Wikipedia URL `https://en.wikipedia.org/wiki/Flesch–Kincaid_readability_tests'."
    (cond
@@ -273,14 +274,16 @@ From Wikipedia URL `https://en.wikipedia.org/wiki/Flesch–Kincaid_readability_t
 
 ;;;###autoload
 (defun writegood-reading-ease (&optional start end)
-  "Flesch-Kincaid reading ease test. Scores roughly between 0 and 100."
+  "Flesch-Kincaid reading ease test in the region bounded by START and END.
+
+Scores roughly between 0 and 100."
    (interactive)
    (let* ((params (writegood-fk-parameters start end))
           (sentences (nth 0 params))
           (words     (nth 1 params))
           (syllables (nth 2 params))
           (score  (- 206.835 (* 1.015 (/ words sentences)) (* 84.6 (/ syllables words)))))
-     (message "Flesch-Kincaid reading ease score: %.2f. %s" score
+     (message "Flesch-Kincaid reading ease score: %.2f %s" score
             (writegood-reading-ease-score->comment score))))
 
 ;;;###autoload
@@ -300,7 +303,7 @@ From Wikipedia URL `https://en.wikipedia.org/wiki/Flesch–Kincaid_readability_t
   :lighter " Wg"
   (progn
     (if writegood-mode
-	(writegood-turn-on)
+  (writegood-turn-on)
       (writegood-turn-off))
     (font-lock-mode 1)))
 
