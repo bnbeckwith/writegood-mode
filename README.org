@@ -32,6 +32,27 @@
 : (global-set-key "\C-c\C-gg" 'writegood-grade-level)
 : (global-set-key "\C-c\C-ge" 'writegood-reading-ease)
 
+** On the fly
+
+  There is support for on-the-fly calculation of the reading score.
+  This means that while you are writing you will see your sentences
+  receive a score in the modeline.
+  
+  There are three events that triggers the on-the-fly calculation:
+  
+  1. closing a sentence with a '.' character.
+  2. filling a paragraph (typically done in Emacs with =M-q=)
+  3. saving the buffer
+
+  These events will trigger the score calculation for the sentence,
+  paragraph and buffer at point respectively.
+
+  This feature can be toggled on and off with:
+
+: (writegood-on-the-fly-toggle)
+
+  Or by pressing =M-x writegood-on-the-fly-toggle=.
+
 * Customization
 
 The user is free to customize three main portions of the mode.
@@ -56,6 +77,21 @@ The user is free to customize three main portions of the mode.
    There is also a list of irregular passive voice verbs.  These are
    the verbs that do not end in 'ed' to signify past tense. This
    variable allow the user to modify the list as needed.
+
+** Modes For On The Fly Scoring
+
+  One can customize the modes in which the on-the-fly feature should
+  run (for instance may not make sense to check readability scores in
+  a programming mode). The variable to customize is:
+  =writegood-on-the-fly-modes=.
+  
+  An example of customization can be:
+  
+: (add-to-list 'writegood-on-the-fly-modes "some-cool-mode")
+
+  By default this is set to:
+
+: '("text-mode" "fundamental-mode" "org-mode" "latex-mode" "rst-mode" "markdown-mode" "mu4e-compose-mode")
 
 * Alternatives
 
