@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2.0.4 Remove cl dependency
 ;; 2.0.3 Add in a small decription of the Flesch-Kincaid score
 ;; 2.0.2 Fix Formatting in Org-mode files, make faces underline
 ;; 2.0.1 Make user additions to word lists dynamic
