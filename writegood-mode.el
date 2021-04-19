@@ -150,6 +150,12 @@
   :group 'writegood
   :type '(repeat character))
 
+(defcustom writegood-on-the-fly-modes
+  '("text-mode" "org-mode" "latex-mode" "rst-mode" "markdown-mode" "mu4e-compose-mode")
+  "The modes in which on-the-fly writegood is active"
+  :group 'writegood
+  :type '(repeat string))
+
 (defun writegood-passive-voice-font-lock-keywords-regexp ()
   "Generate font-lock keywords regexp for passive-voice"
   (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
@@ -270,17 +276,105 @@ From Wikipedia URL `https://en.wikipedia.org/wiki/Flesch–Kincaid_readability_t
     ((and (<= 80.0 score) (< score 90.0)) "Easy (6th grade)")
     ((<= 90.0 score) "Very easy (5th grade)")))
 
+(defun writegood-calculate-reading-ease (&optional start end)
+  "Calculate score of Flesch-Kincaid reading ease test in the region bounded by START and END.
+
+Scores roughly between 0 and 100."
+  (let* ((params (writegood-fk-parameters start end))
+        (sentences (nth 0 params))
+        (words     (nth 1 params))
+        (syllables (nth 2 params)))
+    (- 206.835 (* 1.015 (/ words sentences)) (* 84.6 (/ syllables words)))))
+
+(defun writegoodmode-reading-ease-thing-at-point (thing)
+  "Calculate score for thing at point."
+  (let* ((bounds (bounds-of-thing-at-point thing))
+         (b (car bounds))
+         (e (cdr bounds)))
+    (if (and
+         (not (null b))
+         (not (null e))
+         ;; this is a guess: when the interval between boundaries is
+         ;; huge, the paragraph is too big to be validated.
+         (< (- e b) 100000))
+        (let ((score (writegood-calculate-reading-ease b e)))
+          (message "%s reading ease score: %.2f %s" (symbol-name thing) score
+            (writegood-reading-ease-score->comment score))))))
+
+;;;###autoload
+(defun writegoodmode-reading-ease-sentence ()
+  "Calculate score for the sentence at point."
+  (interactive)
+  (writegoodmode-reading-ease-thing-at-point 'sentence))
+
+;;;###autoload
+(defun writegoodmode-reading-ease-paragraph ()
+  "Calculate score for the paragraph at point."
+  (interactive)
+  (writegoodmode-reading-ease-thing-at-point 'paragraph))
+
+;;;###autoload
+(defun writegoodmode-reading-ease-page ()
+  "Calculate score for the page at point."
+  (interactive)
+  (writegoodmode-reading-ease-thing-at-point 'page))
+
+(defun writegood-after-sentence ()
+  "Calculate reading ease after a sentence is completed. Here we
+consider the sentence completion the addition of a dot."
+  (if (string-match-p sentence-end-base (make-string 1 last-command-event))
+      (writegoodmode-reading-ease-sentence)))
+
+(defun writegood-after-paragraph ()
+  "Calculate reading ease after a paragraph is completed. Here we
+consider the paragraph completion to be the call of a
+,*-fill-paragraph command."
+  (if (string-match-p (regexp-quote "fill-paragraph") (symbol-name real-this-command)) (writegoodmode-reading-ease-paragraph)))
+
+(defun apply-only-in-text-major-modes (fn)
+  (if (member (symbol-name major-mode) writegood-on-the-fly-modes)
+      (funcall fn)))
+
+(defun writegood-after-sentence-hook ()
+  (save-excursion
+    (goto-char (- (point) 2)) ; go back a couple of char to make thing-at-point work on the right sentence
+    (apply-only-in-text-major-modes 'writegood-after-sentence)))
+(defun writegood-after-paragraph-hook () (apply-only-in-text-major-modes 'writegood-after-paragraph))
+(defun writegood-after-page-hook () (apply-only-in-text-major-modes 'writegoodmode-reading-ease-page))
+
+(defun writegood-on-the-fly-turn-on ()
+  "Add hooks to enable on-the-fly scoring."
+  (add-hook 'post-self-insert-hook 'writegood-after-sentence-hook)
+  (add-hook 'post-command-hook 'writegood-after-paragraph-hook)
+  (add-hook 'after-save-hook 'writegood-after-page-hook)
+  (message "Writegood-mode-on-the-fly turned on."))
+
+(defun writegood-on-the-fly-turn-off ()
+  "Remove hooks to disable on-the-fly scoring."
+  (remove-hook 'post-self-insert-hook 'writegood-after-sentence-hook)
+  (remove-hook 'post-command-hook 'writegood-after-paragraph-hook)
+  (remove-hook 'after-save-hook 'writegood-after-page-hook)
+  (message "Writegood-mode-on-the-fly turned off."))
+
+
+;;;###autoload
+(defun writegood-on-the-fly-toggle ()
+  "Toggle on-the-fly writegood mode. Now every time a dot is typed to close a sentence, every time a paragraph is filled,
+and every time the buffer is saved the easy score is calculated
+for a sentence, paragraph, whole buffer respectively. The result is shown as a message."
+  (interactive)
+  (let ((are-hook-set (member 'writegood-after-page-hook (with-temp-buffer after-save-hook))))
+    (if are-hook-set
+        (writegood-on-the-fly-turn-off)
+      (writegood-on-the-fly-turn-on))))
+
 ;;;###autoload
 (defun writegood-reading-ease (&optional start end)
   "Flesch-Kincaid reading ease test in the region bounded by START and END.
 
 Scores roughly between 0 and 100."
    (interactive)
-   (let* ((params (writegood-fk-parameters start end))
-          (sentences (nth 0 params))
-          (words     (nth 1 params))
-          (syllables (nth 2 params))
-          (score  (- 206.835 (* 1.015 (/ words sentences)) (* 84.6 (/ syllables words)))))
+   (let ((score (writegood-calculate-reading-ease start end)))
      (message "Flesch-Kincaid reading ease score: %.2f %s" score
             (writegood-reading-ease-score->comment score))))
 
