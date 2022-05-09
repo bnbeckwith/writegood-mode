@@ -2,7 +2,7 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 2.0
+;; Version: 2.1.0
 ;; Last-Updated: 2015-03-25
 ;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words grammar
@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2.1.0 Add capability to add custom regexps
 ;; 2.0.4 Remove cl dependency
 ;; 2.0.3 Add in a small decription of the Flesch-Kincaid score
 ;; 2.0.2 Fix Formatting in Org-mode files, make faces underline
@@ -74,8 +75,15 @@
   :group 'help
   :link '(url-link "http://github.com/bnbeckwith/writegood-mode"))
 
-(defconst writegood-version "2.0"
+(defconst writegood-version "2.1.0"
   "WriteGood mode version")
+
+;; General Custom settings
+(defcustom writegood-sentence-punctuation
+  '(?. ?? ?!)
+  "List of punctuation denoting sentence end"
+  :group 'writegood
+  :type '(repeat character))
 
 ;; Weaselwords
 (defface writegood-weasels-face
@@ -99,9 +107,18 @@
   :group 'writegood
   :type '(repeat string))
 
+(defcustom writegood-weasel-words-additional-regexp
+  nil
+  "Additional regexp to identify weasel words."
+  :group 'writegood
+  :type 'regexp)
+
 (defun writegood-weasels-font-lock-keywords-regexp ()
   "Generate regex that matches weasel-words"
-  (concat "\\b" (regexp-opt writegood-weasel-words) "\\b"))
+  (concat "\\b\\(?:" (regexp-opt writegood-weasel-words)
+          (when writegood-weasel-words-additional-regexp
+            (concat "\\|" writegood-weasel-words-additional-regexp))
+          "\\)\\b"))
 
 (defun writegood-weasels-font-lock-keywords ()
   (list (list (writegood-weasels-font-lock-keywords-regexp)
@@ -144,16 +161,18 @@
   :group 'writegood
   :type '(repeat string))
 
-(defcustom writegood-sentence-punctuation
-  '(?. ?? ?!)
-  "List of punctuation denoting sentence end"
+(defcustom writegood-passive-voice-irregulars-additional-regexp
+  nil
+  "Additional regexp for passive voice irregulars"
   :group 'writegood
-  :type '(repeat character))
+  :type 'regexp)
 
 (defun writegood-passive-voice-font-lock-keywords-regexp ()
   "Generate font-lock keywords regexp for passive-voice"
-  (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
-    (regexp-opt writegood-passive-voice-irregulars)
+  (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\1([[:word:]]+ed\\|"
+          (regexp-opt writegood-passive-voice-irregulars)
+          (when writegood-passive-voice-irregulars-additional-regexp
+            (concat "\\)\\|\\(" writegood-passive-voice-irregulars-additional-regexp))
     "\\)\\b"))
 
 (defun writegood-passive-voice-font-lock-keywords ()

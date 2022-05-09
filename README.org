@@ -22,7 +22,7 @@
   would be necessary.
 
 * Readability tests
-  
+
   There are now two functions to perform [[http://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests][Flesch-Kincaid scoring]] and
   grade-level estimation. These follow the known algorithms, but may
   differ from other implementations due to the syllable estimation.
@@ -41,21 +41,32 @@ The user is free to customize three main portions of the mode.
    The three faces used pull from the default warning face and add
    subtle backgrounds.  There is a separate face for each check performed.
 
-   - Weasel words (writegood-weasels-face)
-   - Passive voice (writegood-passive-voice-face)
-   - Duplicate words (writegood-duplicates-face)
+   - Weasel words (~writegood-weasels-face~)
+   - Passive voice (~writegood-passive-voice-face~)
+   - Duplicate words (~writegood-duplicates-face~)
 
 ** Weasel Words
 
    There is a large list of included weasel words, but you may have
-   your own.  See the write-good-weasel-words variable to modify this
+   your own.  See the ~write-good-weasel-words~ variable to modify this
    list.
+
+   Additionally, if you require more than a list of words to mark up
+   your content, then there is a custom variable,
+   ~writegood-weasel-words-additional-regexp~ that allows a custom
+   regular expression for matching whatever you heart desires
+   (expressed as a regex).
 
 ** Passive Voice Irregulars
 
    There is also a list of irregular passive voice verbs.  These are
    the verbs that do not end in 'ed' to signify past tense. This
    variable allow the user to modify the list as needed.
+
+   Similar to weasel words, the custom variable
+   ~writegood-passive-voice-irregulars-additional-regexp~ allows the use
+   of an additional regular expression to highlight passive voice irregulars.
+
 
 * Alternatives
 
