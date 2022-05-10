@@ -2,7 +2,7 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 2.1.0
+;; Version: 2.1.1
 ;; Last-Updated: 2015-03-25
 ;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words grammar
@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2.1.1 Fix bug with regex definition
 ;; 2.1.0 Add capability to add custom regexps
 ;; 2.0.4 Remove cl dependency
 ;; 2.0.3 Add in a small decription of the Flesch-Kincaid score
@@ -169,7 +170,7 @@
 
 (defun writegood-passive-voice-font-lock-keywords-regexp ()
   "Generate font-lock keywords regexp for passive-voice"
-  (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\1([[:word:]]+ed\\|"
+  (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
           (regexp-opt writegood-passive-voice-irregulars)
           (when writegood-passive-voice-irregulars-additional-regexp
             (concat "\\)\\|\\(" writegood-passive-voice-irregulars-additional-regexp))
