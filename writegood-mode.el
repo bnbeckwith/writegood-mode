@@ -2,7 +2,7 @@
 ;;
 ;; Author: Benjamin Beckwith
 ;; Created: 2010-8-12
-;; Version: 2.1.1
+;; Version: 2.2.0
 ;; Last-Updated: 2015-03-25
 ;; URL: http://github.com/bnbeckwith/writegood-mode
 ;; Keywords: writing weasel-words grammar
@@ -23,6 +23,7 @@
 ;;
 ;;; Change Log:
 ;;
+;; 2.2.0 Add tooltips to explain detected text
 ;; 2.1.1 Fix bug with regex definition
 ;; 2.1.0 Add capability to add custom regexps
 ;; 2.0.4 Remove cl dependency
@@ -76,7 +77,7 @@
   :group 'help
   :link '(url-link "http://github.com/bnbeckwith/writegood-mode"))
 
-(defconst writegood-version "2.1.0"
+(defconst writegood-version "2.2.0"
   "WriteGood mode version")
 
 ;; General Custom settings
@@ -108,6 +109,11 @@
   :group 'writegood
   :type '(repeat string))
 
+(defcustom writegood-weasel-words-tooltip "Weasel word: consider removing or replacing"
+  "Message to show for weasel words"
+  :group 'writegood
+  :type 'string)
+
 (defcustom writegood-weasel-words-additional-regexp
   nil
   "Additional regexp to identify weasel words."
@@ -122,8 +128,8 @@
           "\\)\\b"))
 
 (defun writegood-weasels-font-lock-keywords ()
-  (list (list (writegood-weasels-font-lock-keywords-regexp)
-        0 (quote 'writegood-weasels-face) 'prepend)))
+  `((,(writegood-weasels-font-lock-keywords-regexp)
+     0 '(face writegood-weasels-face help-echo ,writegood-weasel-words-tooltip) prepend)))
 
 ;; Passive Voice
 (defface writegood-passive-voice-face
@@ -168,6 +174,11 @@
   :group 'writegood
   :type 'regexp)
 
+(defcustom writegood-passive-voice-tooltip "Switch to active voice"
+  "Message to show for passive-voice text"
+  :group 'writegood
+  :type 'string)
+
 (defun writegood-passive-voice-font-lock-keywords-regexp ()
   "Generate font-lock keywords regexp for passive-voice"
   (concat "\\b\\(am\\|are\\|were\\|being\\|is\\|been\\|was\\|be\\)\\b\\([[:space:]]\\|\\s<\\|\\s>\\)+\\([[:word:]]+ed\\|"
@@ -177,8 +188,8 @@
     "\\)\\b"))
 
 (defun writegood-passive-voice-font-lock-keywords ()
-  (list (list (writegood-passive-voice-font-lock-keywords-regexp)
-        0 (quote 'writegood-passive-voice-face) 'prepend)))
+  `((,(writegood-passive-voice-font-lock-keywords-regexp)
+        0 '(face writegood-passive-voice-face help-echo ,writegood-passive-voice-tooltip) prepend)))
 
 ;; Duplicates
 (defface writegood-duplicates-face
@@ -191,13 +202,18 @@
   "Writegood face for duplicate words"
   :group 'writegood)
 
+(defcustom writegood-duplicates-tooltip "Duplicates detected"
+  "Message to show for duplicated words"
+  :group 'writegood
+  :type 'string)
+
 (defvar writegood-duplicates-font-lock-keywords-regexp
   "\\b\\([[:word:]]+\\)\\([[:space:]]\\|\\s<\\|\\s>\\)+\\1\\b"
   "Font-lock keywords for duplicates")
 
 (defun writegood-duplicates-font-lock-keywords ()
-  (list (list writegood-duplicates-font-lock-keywords-regexp
-        0 (quote 'writegood-duplicates-face) 'prepend)))
+  `((,writegood-duplicates-font-lock-keywords-regexp
+        0 '(face writegood-duplicates-face help-echo ,writegood-duplicates-tooltip) prepend)))
 
 ;;;;;;;;;;;;;;;;;;;; Functions:
 
