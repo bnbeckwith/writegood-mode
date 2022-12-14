@@ -48,7 +48,7 @@ The user is free to customize three main portions of the mode.
 ** Weasel Words
 
    There is a large list of included weasel words, but you may have
-   your own.  See the ~write-good-weasel-words~ variable to modify this
+   your own.  See the ~writegood-weasel-words~ variable to modify this
    list.
 
    Additionally, if you require more than a list of words to mark up
